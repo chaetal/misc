@@ -38,7 +38,7 @@ class RealContainer implements Container {
 
 Не вдаваясь в подробности — смысл в том, что теория дженериков в Java гласит: дженерики c вайлдкардами (типа `<? extends SomeClass>`) можно использовать только во входных параметрах. Ну, оно логично в рамках того, как обобщённые типы сделаны в Java.
 
-Просто изменить, как просят, `getElements` в `Container`
+Просто изменить, как просят, `getElements` в `Container`{:.java}
 
 ```java
 interface Container {  
