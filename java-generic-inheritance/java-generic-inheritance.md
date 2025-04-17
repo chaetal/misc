@@ -78,7 +78,7 @@ default List<T> toList()
 interface Container<T extends Element>
 ```
 
-И в этом случае, кстати, уже вполне подходит .toList().
+И в этом случае, кстати, уже вполне подходит `.toList()`.
 
 ```java
     interface Container<T extends Element> {
