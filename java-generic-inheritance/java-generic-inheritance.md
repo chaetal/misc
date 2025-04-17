@@ -38,43 +38,26 @@ class RealContainer implements Container {
 
 Не вдаваясь в подробности — смысл в том, что теория дженериков в Java гласит: дженерики c вайлдкардами (типа `<? extends SomeClass>`) можно использовать только во входных параметрах. Ну, оно логично в рамках того, как обобщённые типы сделаны в Java.
 
-И я долго провозился с тем, чтобы эту проблемку решить. 
-
-Просто изменить, как просят, getElements в Container — не достаточно:
+Просто изменить, как просят, `getElements` в `Container`
 
 ```
 interface Container {  
     List<Element> getElements();  
 }
 ```
-
-Тогда сломается RealContainer:
+не достаточно — сломается RealContainer:
 ![](./20250417141625.png)
 
 Если (что логично) поменять выходной тип на `List<Element>`, то появляется другая ошибка:
 
 ![](./20250417141740.png)
  
-Довольно долго искал, но, как оказалось, можно вот так сделать:
+Тут мне пришлось потратить время на поиск решения, которое оказалось простым — использовать `.collect`:
 ```
-class RealContainer implements Container {  
-    @Override  
-    public List <Element> getElements() {  
-        return this.data.stream().map(RealElement::new).class RealContainer implements Container {  
-    @Override  
-    public List <Element> getElements() {  
         return this.data.stream().map(RealElement::new).collect(Collectors.toList());  
-    }  
-  
-    private List<Datum> data;  
-};  
-    }  
-  
-    private List<Datum> data;  
-}
 ```
 
-"Волшебство" заключается в том, что `.collect(Collectors.toList())`в отличие от .toList() параметризован более универсально:
+"Волшебство" заключается в том, что `.collect(Collectors.toList())` в отличие от .toList() параметризован более универсально:
 ```
  <R, A> R collect(Collector<? super T, A, R> collector);
 ```
@@ -82,3 +65,12 @@ class RealContainer implements Container {
 ```
 default List<T> toList()
 ```
+
+На будущее, если захочется ещё больше гибкости, то исходный `Container` можно тоже параметризовать:
+
+```
+interface Container<T extends Element>
+```
+
+
+
