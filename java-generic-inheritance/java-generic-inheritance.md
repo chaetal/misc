@@ -57,7 +57,7 @@ interface Container {
         return this.data.stream().map(RealElement::new).collect(Collectors.toList());  
 ```
 
-"Волшебство" заключается в том, что `.collect(Collectors.toList())` в отличие от .toList() параметризован более универсально:
+"Волшебство" заключается в том, что `.collect(Collectors.toList())` в отличие от `.toList()` параметризован более универсально:
 ```
  <R, A> R collect(Collector<? super T, A, R> collector);
 ```
@@ -66,11 +66,38 @@ interface Container {
 default List<T> toList()
 ```
 
-На будущее, если захочется ещё больше гибкости, то исходный `Container` можно тоже параметризовать:
+На будущее, если захочется ещё больше гибкости, то исходный `Container` можно тоже (правильно) параметризовать:
 
 ```
 interface Container<T extends Element>
 ```
+И в этом случае, кстати, уже вполне подходит .toList().
 
+```
+    interface Container<T extends Element> {
+        List<T> getElements();
+    }
+
+    interface Element {
+    }
+
+
+    class RealElement implements Element {
+        public RealElement(Datum d) {
+        }
+    }
+
+    interface Datum {}
+
+    class RealContainer implements Container<RealElement> {
+        @Override
+        public List<RealElement> getElements() {
+            //return this.data.stream().map(RealElement::new).toList();
+            return this.data.stream().map(RealElement::new).toList();
+        }
+
+        private List<Datum> data;
+    }
+```
 
 
