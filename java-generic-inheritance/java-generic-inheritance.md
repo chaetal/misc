@@ -49,9 +49,12 @@ interface Container {
 ```
 
 Тогда сломается RealContainer:
-![[Pasted image 20250417141625.png]]
+![](./20250417141625.png)
+
 Если (что логично) поменять выходной тип на `List<Element>`, то появляется другая ошибка:
- ![[Pasted image 20250417141740.png]]
+
+![](./20250417141740.png)
+ 
 Довольно долго искал, но, как оказалось, можно вот так сделать:
 ```
 class RealContainer implements Container {  
